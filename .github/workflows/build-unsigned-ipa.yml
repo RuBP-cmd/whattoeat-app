@@ -3,7 +3,7 @@ name: Build Unsigned iOS IPA (WhatToEat2)
 on:
   workflow_dispatch: # 页面手动点运行
   push:
-    branches: [ main, release/** ]
+    branches: [ main, release/**,feature/calendar ]
 
 # 单任务，使用Apple Silicon macOS runner
 jobs:
