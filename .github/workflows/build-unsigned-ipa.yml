@@ -24,46 +24,43 @@ jobs:
         with:
           fetch-depth: 1
 
-      # 步骤2：固定Xcode版本，避免版本不兼容
-      - name: Lock Xcode 16.2
-        run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
-      # 步骤3：配置JDK21 Amazon Corretto，匹配项目gradle
+      # 步骤2：配置JDK21 Amazon Corretto，匹配项目gradle
       - name: Setup JDK 21 Corretto
         uses: actions/setup-java@v4
         with:
           distribution: amazon-corretto
           java-version: 21
 
-      # 步骤4：赋予gradlew执行权限 + 校验wrapper完整性（安全）
+      # 步骤3：赋予gradlew执行权限 + 校验wrapper完整性（安全）
       - name: Prepare Gradle Wrapper
         run: |
           chmod +x ./gradlew
           ./gradlew wrapper --verify
 
-      # 步骤5：缓存1 - Kotlin/Native Konan编译器缓存 ~1.2GB
+      # 步骤4：缓存1 - Kotlin/Native Konan编译器缓存 ~1.2GB
       - name: Cache Konan Compiler
         uses: actions/cache@v4
         with:
           path: ${{ env.KONAN_CACHE_PATH }}
           key: konan-${{ hashFiles('libs.versions.toml', 'shared/build.gradle.kts') }}
 
-      # 步骤6：缓存2 - Gradle构建缓存 ~700MB
+      # 步骤5：缓存2 - Gradle构建缓存 ~700MB
       - name: Cache Gradle Build Cache
         uses: actions/cache@v4
         with:
           path: ${{ env.GRADLE_CACHE_PATH }}
           key: gradle-${{ hashFiles('**/*.gradle.kts', 'gradle-wrapper.properties', 'libs.versions.toml') }}
 
-      # 步骤7：缓存未命中时预热Konan，提前下载Kotlin/Native工具链
+      # 步骤6：缓存未命中时预热Konan，提前下载Kotlin/Native工具链
       - name: Pre-warm Konan (only miss cache)
         run: ./gradlew :shared:compileKotlinIosArm64 --no-configuration-cache
 
-      # 步骤8：预构建Shared Framework，规避无签名时Xcode脚本报错（风险兜底方案）
+      # 步骤7：预构建Shared Framework，规避无签名时Xcode脚本报错（风险兜底方案）
       - name: Pre-build Shared iOS Framework
         run: ./gradlew :shared:linkReleaseFrameworkIosArm64 --no-configuration-cache
 
-      # 步骤9：核心 xcodebuild 编译，全局禁用签名
+      # 步骤8：核心 xcodebuild 编译，全局禁用签名
       - name: Xcode Build Release iPhoneOS (Unsigned)
         run: |
           xcodebuild \
@@ -78,7 +75,7 @@ jobs:
             DEVELOPMENT_TEAM="" \
             2>&1 | tee xcodebuild.log
 
-      # 步骤10：提取编译输出.app，打包标准未签名IPA
+      # 步骤9：提取编译输出.app，打包标准未签名IPA
       - name: Package unsigned IPA
         run: |
           # 找到Xcode编译输出的.app目录
@@ -93,7 +90,7 @@ jobs:
           zip -q -r ${{ env.APP_NAME }}-iOS-unsigned.ipa Payload
           ls -lh *.ipa
 
-      # 步骤11：上传IPA制品，保留7天
+      # 步骤10：上传IPA制品，保留7天
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -101,7 +98,7 @@ jobs:
           path: ${{ env.APP_NAME }}-iOS-unsigned.ipa
           retention-days: 7
 
-      # 步骤12：上传完整构建日志，保留14天用于排错
+      # 步骤11：上传完整构建日志，保留14天用于排错
       - name: Upload Build Log
         uses: actions/upload-artifact@v4
         with:
