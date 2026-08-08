@@ -3,7 +3,7 @@ name: Build Unsigned iOS IPA (WhatToEat2)
 on:
   workflow_dispatch: # 页面手动点运行
   push:
-    branches: [ main, release/**,feature/calendar ]
+    branches: [ main, release/**, feature/calendar ]
 
 # 单任务，使用Apple Silicon macOS runner
 jobs:
@@ -36,7 +36,6 @@ jobs:
       - name: Prepare Gradle Wrapper
         run: |
           chmod +x ./gradlew
-          ./gradlew wrapper --verify
 
       # 步骤4：缓存1 - Kotlin/Native Konan编译器缓存 ~1.2GB
       - name: Cache Konan Compiler
