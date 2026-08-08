@@ -27,9 +27,9 @@ jobs:
 
       # 步骤2：配置JDK21 Amazon Corretto，匹配项目gradle
       - name: Setup JDK 21 Corretto
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
-          distribution: amazon-corretto
+          distribution: corretto
           java-version: 21
 
       # 步骤3：赋予gradlew执行权限 + 校验wrapper完整性（安全）
