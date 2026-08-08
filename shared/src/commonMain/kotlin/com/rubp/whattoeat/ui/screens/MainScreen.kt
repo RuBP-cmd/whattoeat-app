@@ -30,6 +30,7 @@ import com.composables.icons.materialicons.filled.Home
 import com.composables.icons.materialicons.filled.Settings
 import com.composables.icons.materialicons.outlined.Home
 import com.composables.icons.materialicons.outlined.Settings
+import com.rubp.whattoeat.ui.screens.calendar.CalendarScreen
 import com.rubp.whattoeat.ui.screens.food.EatScreen
 import com.rubp.whattoeat.ui.screens.food.FoodEditScreen
 import com.rubp.whattoeat.ui.screens.home.HomeScreen
@@ -52,6 +53,8 @@ object PracticalWebsite
 @Serializable
 object Other
 
+@Serializable
+object Calendar
 
 //@OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -77,7 +80,8 @@ fun MainScreen(){
                 composable<Home>{ HomeScreen(
                     onNavigateToEat = { navController.navigate(Eat)}, // Home -> Eat
                     onNavigateToPracticalWebsite = { navController.navigate(PracticalWebsite) }, // Home -> PracticalWebsite
-                    onNavigateToOther = { navController.navigate(Other) }
+                    onNavigateToOther = { navController.navigate(Other) },
+                    onNavigateToCalendar = { navController.navigate((Calendar)) }
                 ) }
                 composable<Settings>{ SettingsScreen() }
                 composable<Eat>{ EatScreen( // Home <- Eat -> FoodEdit
@@ -91,6 +95,7 @@ fun MainScreen(){
                 ) } // Eat <- FoodEdit
                 composable<PracticalWebsite>{ PracticalWebsiteScreen { navController.popBackStack() } }
                 composable<Other>{ OtherScreen{ navController.popBackStack() } }
+                composable<Calendar> { CalendarScreen { navController.popBackStack() } }
             }
         }
     }

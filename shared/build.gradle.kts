@@ -68,6 +68,7 @@ kotlin {
             implementation(libs.androidx.sqlite.bundled)    // 数据库
             implementation(libs.kotlinx.serialization.json)   // 导航类型安全路由依赖
             implementation(libs.androidx.navigation.compose)   // 导航
+            implementation(libs.kotlinx.datetime)   // 引入日期和时间处理库
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
