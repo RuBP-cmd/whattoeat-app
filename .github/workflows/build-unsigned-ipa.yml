@@ -68,7 +68,6 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath "${{ runner.temp }}/DerivedData" \
-            OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED=YES \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
